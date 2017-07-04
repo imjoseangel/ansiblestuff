@@ -1,0 +1,20 @@
+---
+# Variables for the web server configuration
+
+# Ethernet interface on which the server should listen.
+# Defaults to the first interface. Change this to:
+#
+# iface: eth1
+#
+# ...to override.
+#
+iface: '{{ ansible_default_ipv4.interface }}'
+
+apache_test_message: This is a test -
+apache_max_keep_alive_requests: 115
+apache_docroot: /var/www/html
+apache_config: /etc/httpd/conf/httpd.conf
+sites_available: /etc/httpd/conf/sites-available
+sites_enabled: /etc/httpd/conf/sites-enabled
+
+lameapp_version: 1.1
