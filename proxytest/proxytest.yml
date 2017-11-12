@@ -7,9 +7,14 @@
     no_proxy: "127.0.0.1,localhost,.local,169.254.169.254"
   remote_user: pi
   tasks:
-  - debug: 
+  - name: Proxy Defined
+    debug: 
       msg: "{{ http_proxy }}"
-    when: (http_proxy is defined) and (http_proxy != "")
+    when: (http_proxy is defined) and http_proxy|default('')
+  - name: Proxy Not Defined
+    debug:
+      msg: "Hola"
+    when: (http_proxy is not defined) or not http_proxy|default('')
   
 
 # when: ( http_proxy is defined ) and ( http_proxy|trim != '' )
