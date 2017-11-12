@@ -1,0 +1,15 @@
+---
+- hosts: raspberry
+
+  vars:
+    http_proxy: http://proxy:8080
+    https_proxy: http://proxy:8080
+    no_proxy: "127.0.0.1,localhost,.local,169.254.169.254"
+  remote_user: pi
+  tasks:
+  - debug: 
+      msg: "{{ http_proxy }}"
+    when: (http_proxy is defined) and (http_proxy != "")
+  
+
+# when: ( http_proxy is defined ) and ( http_proxy|trim != '' )
