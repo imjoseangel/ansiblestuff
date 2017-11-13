@@ -11,10 +11,18 @@
     debug: 
       msg: "{{ http_proxy }}"
     when: (http_proxy is defined) and http_proxy|default('')
+  - name: Another Proxy Defined
+    debug: 
+      msg: "{{ http_proxy }}"
+    when: not http_proxy|default('')|empty and enable_proxy|default(true)
   - name: Proxy Not Defined
     debug:
       msg: "Hola"
     when: (http_proxy is not defined) or not http_proxy|default('')
+  - name: Another Proxy Not Defined
+    debug:
+      msg: "Hola"
+    when: http_proxy|default('')|empty and enable_proxy|default(true)
   
 
 # when: ( http_proxy is defined ) and ( http_proxy|trim != '' )
