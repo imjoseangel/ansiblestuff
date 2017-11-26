@@ -9,3 +9,23 @@
     - name: Proxy Defined
       debug:
         msg: '{{ myget_args }}'
+
+    - name: Main
+      block:
+        - name: main | execute | run things
+          debug:
+            msg: '{{ myget_args }}'
+
+      always:
+        - name: main | always | remove temporary working directory
+          file:
+            path  : "{{ work_dir }}"
+            state : absent
+          delegate_to: localhost
+
+      rescue:
+        - name: notify slack of deploy failure
+          local_action:
+            module: slack
+            token: "{{slack_token}}"
+            msg: "Deploy failed on {{inventory_hostname}}"
