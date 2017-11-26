@@ -1,0 +1,11 @@
+- hosts: raspberry
+  vars:
+    no_proxy: '127.0.0.1,localhost,.local,169.254.169.254'
+  remote_user: pi
+  tasks:
+    - name: execute | hosts
+      set_fact:
+        myget_args: '{{ hostvars[inventory_hostname] }}'
+    - name: Proxy Defined
+      debug:
+        msg: '{{ myget_args }}'
