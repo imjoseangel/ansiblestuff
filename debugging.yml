@@ -1,0 +1,4 @@
+  - name: Debugging Download
+    debug:
+      msg: "{{ _azdownload }}"
+    when: verbose|default(false)
