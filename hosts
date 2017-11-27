@@ -1,3 +1,6 @@
+[local]
+localhost
+
 [webservers]
 10.42.0.6
 
