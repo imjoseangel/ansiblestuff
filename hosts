@@ -11,4 +11,4 @@ localhost ansible_connection=local
 10.42.0.100
 
 [raspberry]
-82.213.221.182
+imjoseangel.duckdns.org
