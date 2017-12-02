@@ -12,3 +12,6 @@ Using the 'setup' module for ansible, list all of the known facts on the local |
 While listing the facts on the local system, filter the list showing only the content pertaining to the system IP addresses.
 
 `ansible local -m setup -a 'filter=ans*ipv4*'`
+
+async: 300 -> Number of seconds
+poll: 3 -> Number of simultaneous hosts
