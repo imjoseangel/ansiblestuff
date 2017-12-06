@@ -32,6 +32,15 @@
           debug:
             msg: "{{ work_dir.path }}"
 
+        - name: Local Action Test
+          local_action:
+            module: command
+            args: ping -c 1 www.google.com
+
+        - name: Delegate to Test
+          command: ping -c 1 www.google.com
+          delegate_to: localhost
+
       rescue:
         - name: notify slack of deploy failure
           debug:
