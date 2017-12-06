@@ -16,16 +16,20 @@
           debug:
             msg: '{{ myget_args }}'
 
+        - name: Create Temp Dir
+          tempfile:
+            state: directory
+            suffix: build
+          return: work_dir
+
       always:
         - name: main | always | remove temporary working directory
           file:
-            path  : "{{ work_dir }}"
+            path  : "{{ work_dir.path }}"
             state : absent
           delegate_to: localhost
 
       rescue:
         - name: notify slack of deploy failure
-          local_action:
-            module: slack
-            token: "{{slack_token}}"
-            msg: "Deploy failed on {{inventory_hostname}}"
+          debug:
+            msg: "{{ work_dir }}"
