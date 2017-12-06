@@ -1,0 +1,17 @@
+- hosts: raspberry
+  vars:
+    no_proxy: '127.0.0.1,localhost,.local,169.254.169.254'
+  remote_user: ansible
+  become: true
+  tasks:
+    - name: Test Setup
+      setup:
+        filter: ansible_lvm
+      ignore_errors: true
+      result: ansible_lvm
+      
+
+
+    - name: "debug mount"
+      debug:
+        msg: "{{ ansible_lvm }}"
