@@ -20,14 +20,17 @@
           tempfile:
             state: directory
             suffix: build
-          return: work_dir
+          register: work_dir
 
       always:
         - name: main | always | remove temporary working directory
           file:
             path  : "{{ work_dir.path }}"
             state : absent
-          delegate_to: localhost
+
+        - name: notify slack of deploy failure
+          debug:
+            msg: "{{ work_dir.path }}"
 
       rescue:
         - name: notify slack of deploy failure
