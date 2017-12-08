@@ -15,3 +15,5 @@ While listing the facts on the local system, filter the list showing only the co
 
 async: 300 -> Number of seconds
 poll: 3 -> Number of simultaneous hosts
+
+Copy Module: Backup option = yes - Very Useful. Avoids overriding files and creates a backup if they exist.
