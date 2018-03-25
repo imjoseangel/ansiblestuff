@@ -13,7 +13,7 @@ module: confluence_read
 
 short_description: Module to read Confluence pages from its API
 
-version_added: "2.5"
+version_added: "2.4"
 
 description:
     - "The module uses the API described under https://developer.atlassian.com/cloud/confluence/rest"
@@ -53,17 +53,30 @@ author:
 
 EXAMPLES = '''
 # Get Confluence Document
-- name: Get Document
+- name: Read Confluence
     confluence_read:
-      id: 283576376
+    id: 000000001
+    endpoint: https://wiki.atlassian.net
+    username: myusername
+    password: "{{ secrets.mypass }}"
+    register: _value
+
+- name: debug
+    debug:
+    var: _value.msg
 '''
 
 RETURN = '''
 msg:
-    description: None
-    type: None
-    returned: Never
-    sample: "None"
+    description: Table Elements List
+    type: List
+    returned: Always
+    sample: "[{
+            "Description": "GATEWAY",
+            "IP Address": "10.100.10.1",
+            "System": "GATEWAY"
+            }]"
+
 '''
 
 import base64
