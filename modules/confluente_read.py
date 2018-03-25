@@ -13,7 +13,7 @@ module: confluence_read
 
 short_description: Module to read Confluence pages from its API
 
-version_added: "2.4"
+version_added: "2.5"
 
 description:
     - "The module uses the API described under https://developer.atlassian.com/cloud/confluence/rest"
