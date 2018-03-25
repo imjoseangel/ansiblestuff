@@ -177,16 +177,21 @@ class CleanHTMLTable:
         htmltable = re.findall(r'<table[^>]*>[\s\S]*?<\/table>\s*', fixspaces)
 
         # Convert Table to Dict
-        table = ET.XML(htmltable[0])
-        rows = iter(table)
-        headers = [col.text for col in next(rows)]
-        listtable = []
+        try:
+            table = ET.XML(htmltable[0])
+            rows = iter(table)
+            headers = [col.text for col in next(rows)]
+            listtable = []
 
-        for row in rows:
-            values = [col.text for col in row]
-            listtable.append(dict(zip(headers, values)))
+            for row in rows:
+                values = [col.text for col in row]
+                listtable.append(dict(zip(headers, values)))
 
-        return listtable
+            return listtable
+        except ET.ParseError as e:
+            return (False, "Incorrect Table Format: {0}".format(e))
+        except Exception as e:
+            return (False, "Unknown Error: {0}".format(e))
 
 
 class Confluence:
