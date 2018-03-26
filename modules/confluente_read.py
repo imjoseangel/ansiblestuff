@@ -170,7 +170,7 @@ class CleanHTMLTable:
         # Remove tbody and keep table simple
         tbodytags = re.sub(r'<.?tbody>', '', conflnktags)
         # Remove Strong Tags
-        strongtags = re.sub(r'<.?strong>', '', tbodytags)
+        strongtags = re.sub(r'<.?(strong|em|u)>', '', tbodytags)
         # Remove Fixed Spaces
         fixspaces = re.sub(r'&nbsp;', '', strongtags)
         # Get Final Table List
