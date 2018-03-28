@@ -11,12 +11,14 @@ DOCUMENTATION = '''
 ---
 module: confluence_read
 
-short_description: Module to read Confluence pages from its API
+short_description: Module to convert HTML Tables from a Confluence Page to an Ansible List from Confluence API
 
 version_added: "2.4"
 
 description:
-    - "The module uses the API described under https://developer.atlassian.com/cloud/confluence/rest"
+    - The module uses the API described under https://developer.atlassian.com/cloud/confluence/rest. It extracts
+      a single HTML Table from a Confluence Page and Converts it to an Ansible List. It supports Bold, Italic and
+      Underline formats removal. Other special formats are not supported and/or limited.
 
 options:
     id:
