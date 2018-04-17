@@ -1,0 +1,37 @@
+---
+- name: Test Play
+  hosts: localhost
+  gather_facts: False
+
+  vars:
+    host_specific_var: "First Play - Localhost"
+
+
+  tasks:
+    - name: debug
+      debug:
+        var: host_specific_var
+
+- name: Test Another Play
+  hosts: linux
+  gather_facts: False
+
+
+  tasks:
+    - name: debug
+      debug:
+        var: host_specific_var
+
+
+- name: And Another Play
+  hosts: localhost
+  gather_facts: False
+
+  vars:
+    host_specific_var: "Third Play - Localhost"
+
+
+  tasks:
+    - name: debug
+      debug:
+        var: host_specific_var
