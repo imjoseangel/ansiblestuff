@@ -21,6 +21,9 @@
     - name: debug
       debug:
         var: host_specific_var
+        
+    - name: ping
+      ping:
 
 
 - name: And Another Play
