@@ -1,9 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "name": "Package",
-    "type": "object",
+    "title": "Package",
+    "body": "object",
     "additionalProperties": false,
-    "required": [ "name", "description" ],
+    "required": [ "title", "body" ],
     "properties": {
         "title": {
             "type": "string",
