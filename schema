@@ -5,11 +5,11 @@
     "additionalProperties": false,
     "required": [ "name", "description" ],
     "properties": {
-        "name": {
+        "title": {
             "type": "string",
             "description": "Package name, including 'vendor-name/' prefix."
         },
-        "type": {
+        "body": {
             "description": "Package type, either 'library' for common packages, 'composer-plugin' for plugins, 'metapackage' for empty packages, or a custom type ([a-z0-9-]+) defined by whatever project this package applies to.",
             "type": "string"
         },
