@@ -28,12 +28,12 @@ except ImportError:
 # eg: user = os.getenv('LDAP_PASS','mypassword123!')
 
 fallback_args = dict(
-    ldapuri=os.getenv('LDAP_URI', 'ldap://domain.local'),
-    basedn=os.getenv('BASE_DN', 'DC=domain,DC=local'),
-    domainname=os.getenv('DOMAIN_NAME', 'mydomain.com'),
-    user=os.getenv('LDAP_USER', 'ansible@domain.local'),
-    password=os.getenv('LDAP_PASS', 'mypassword'),
-)
+    ldapuri=os.getenv('AD_URI', 'ldap://ldap.forumsys.com'),
+    basedn=os.getenv('AD_BASE', 'DC=example,DC=com'),
+    groupname=os.getenv('AD_GROUP', 'Domain Computers'),
+    domainname=os.getenv('AD_DOMAIN', 'example.com'),
+    user=os.getenv('AD_USER', 'cn=read-only-admin,dc=example,dc=com'),
+    password=os.getenv('AD_PASS', 'password'))
 
 
 class AnsibleInventoryLDAP(object):
@@ -56,7 +56,7 @@ class AnsibleInventoryLDAP(object):
         # Get search results with provided options
         if self.args.os is not False:
             ldapfilter = "(&(objectCategory=Computer)(objectClass=Computer)\
-            (operatingSystem=%s))" % (self.args.os)
+            (operatingSystem=%s))"                                                                     % (self.args.os)
         else:
             ldapfilter = "(&(objectCategory=Computer)(objectClass=Computer))"
 
@@ -168,10 +168,12 @@ class AnsibleInventoryLDAP(object):
 
     def build_hierarchy(self):
         searchresult = self.searchresult
-
-        basedn = self.groupname
-        groupname = basedn.replace(' ', '_').replace('CN=', '').replace(
-            'OU=', '').replace('DC=', '').split(',')[0]
+        try:
+            basedn = self.groupname
+            groupname = basedn.replace(' ', '_').replace('CN=', '').replace(
+                'OU=', '').replace('DC=', '').split(',')[0]
+        except Exception:
+            pass
 
         for dn, attrs in searchresult:
             # Collect information about the host
@@ -221,9 +223,10 @@ class AnsibleInventoryLDAP(object):
     def parse_arguments(self):
         parser = argparse.ArgumentParser(
             description='Populate ansible inventory from LDAP.')
-
         parser.add_argument(
-            'groupname', help='Group Name to search in.')  # Required
+            '--groupname',
+            help='Group Name to search in.',
+            default=fallback_args['groupname']),
         parser.add_argument(
             '--basedn',
             '-b',
@@ -246,7 +249,7 @@ class AnsibleInventoryLDAP(object):
         parser.add_argument(
             '--domainname',
             help='Name of the Domain (domain.local). This name will be\
-            attached to computers without dNSHostName Attribute.',
+            attached to computers without dNSHostName Attribute.'                                                                                                                                  ,
             default=fallback_args['domainname'])
         parser.add_argument(
             '--fqdn',
@@ -257,7 +260,7 @@ class AnsibleInventoryLDAP(object):
             '--os',
             '-os',
             help='Only return hosts matching the OS specified (Uses ldap\
-             formatting, so \'*windows*\').',
+             formatting, so \'*windows*\').'                                                                                        ,
             default=False)
         parser.add_argument(
             '--group-prefix', help='Prefix all group names.', default=False)
