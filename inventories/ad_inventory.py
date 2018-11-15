@@ -56,7 +56,7 @@ class AnsibleInventoryLDAP(object):
         # Get search results with provided options
         if self.args.os is not False:
             ldapfilter = "(&(objectCategory=Computer)(objectClass=Computer)\
-            (operatingSystem=%s))"                                                                     % (self.args.os)
+            (operatingSystem=%s))" % (self.args.os)
         else:
             ldapfilter = "(&(objectCategory=Computer)(objectClass=Computer))"
 
@@ -249,7 +249,7 @@ class AnsibleInventoryLDAP(object):
         parser.add_argument(
             '--domainname',
             help='Name of the Domain (domain.local). This name will be\
-            attached to computers without dNSHostName Attribute.'                                                                                                                                  ,
+            attached to computers without dNSHostName Attribute.',
             default=fallback_args['domainname'])
         parser.add_argument(
             '--fqdn',
@@ -260,7 +260,7 @@ class AnsibleInventoryLDAP(object):
             '--os',
             '-os',
             help='Only return hosts matching the OS specified (Uses ldap\
-             formatting, so \'*windows*\').'                                                                                        ,
+             formatting, so \'*windows*\').',
             default=False)
         parser.add_argument(
             '--group-prefix', help='Prefix all group names.', default=False)
