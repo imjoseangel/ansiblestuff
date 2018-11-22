@@ -7,6 +7,7 @@ from __future__ import (division, absolute_import, print_function,
 import os
 import sys
 import argparse
+import re
 
 try:
     import ldap
@@ -142,9 +143,10 @@ class AnsibleInventoryLDAP(object):
 
         # Force the group name to lowercase
         group_name = group_name.lower()
+        appname = self.appname.lower()
 
         # Append the --group-prefix value if one is specified
-        if self.args.group_prefix is not False:
+        if self.args.group_prefix is not False and group_name == appname:
             group_name = self.args.group_prefix + group_name
 
         # If the group doesn't exist, then create it
@@ -172,12 +174,15 @@ class AnsibleInventoryLDAP(object):
             basedn = self.groupname
             groupname = basedn.replace(' ', '_').replace('CN=', '').replace(
                 'OU=', '').replace('DC=', '').split(',')[0]
+            self.appname = re.search(r'^\w+-\w+-(\w{2,})', groupname).group(1)
+            appname = self.appname
         except Exception:
             pass
 
         for dn, attrs in searchresult:
             # Collect information about the host
             hostvars = {}
+            grouplist = ['all', appname]
 
             try:
                 hostvars['name'] = attrs['dNSHostName'][0].decode("utf-8")
@@ -192,6 +197,7 @@ class AnsibleInventoryLDAP(object):
             try:
                 hostvars['osname'] = attrs['operatingSystem'][0].decode(
                     "utf-8")
+
                 if hostvars['osname'] is not None and "windows" in hostvars[
                         'osname'].lower():
                     hostvars['ansible_port'] = 5985
@@ -200,8 +206,12 @@ class AnsibleInventoryLDAP(object):
                     hostvars['ansible_winrm_server_cert_validation'] = 'ignore'
                     hostvars['ansible_winrm_operation_timeout_sec'] = 200
                     hostvars['ansible_winrm_read_timeout_sec'] = 600
+                    grouplist.append("windows")
+                elif hostvars['osname'] is not None and "linux" in hostvars[
+                        'osname'].lower():
+                    grouplist.append("linux")
             except Exception:
-                pass
+                grouplist.append("os_undefined")
 
             try:
                 hostvars['osversion'] = attrs['operatingSystemVersion'][
@@ -209,16 +219,25 @@ class AnsibleInventoryLDAP(object):
             except Exception:
                 pass
 
+            for attribute in range(1, 5):
+                try:
+                    grouplist.append(attrs['extensionAttribute%s' %
+                                           attribute][0].decode("utf-8"))
+                except Exception:
+                    pass
+
             # Do we want fqdn or just the basic hostname
             if self.args.fqdn is True:
                 hostvars['inventory_name'] = hostvars['name']
             else:
                 hostvars['inventory_name'] = hostvars['cn']
 
-            self.add_inventory_entry(
-                group_name=groupname,
-                host=hostvars['inventory_name'],
-                hostvars=hostvars)
+            for group in grouplist:
+
+                self.add_inventory_entry(
+                    group_name=group,
+                    host=hostvars['inventory_name'],
+                    hostvars=hostvars)
 
     def parse_arguments(self):
         parser = argparse.ArgumentParser(
