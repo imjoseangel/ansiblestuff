@@ -185,7 +185,8 @@ class AnsibleInventoryLDAP(object):
             grouplist = ['all', appname]
 
             try:
-                hostvars['name'] = attrs['dNSHostName'][0].decode("utf-8")
+                hostvars['name'] = attrs['dNSHostName'][0].decode(
+                    "utf-8").lower()
             except Exception:
                 name = dn.replace(' ', '_').replace('CN=', '').replace(
                     'OU=', '').replace('DC=', '').split(',')[0].lower()
@@ -193,6 +194,7 @@ class AnsibleInventoryLDAP(object):
 
             hostvars['cn'] = attrs['cn'][0].decode("utf-8")
             hostvars['dn'] = attrs['distinguishedName'][0].decode("utf-8")
+            hostvars['appname'] = appname.lower()
 
             try:
                 hostvars['osname'] = attrs['operatingSystem'][0].decode(
@@ -219,9 +221,17 @@ class AnsibleInventoryLDAP(object):
             except Exception:
                 pass
 
+            for value, attributeid in enumerate(reversed(range(16, 21)), 1):
+                try:
+                    hostvars['custom%s' %
+                             value] = attrs['msDS-cloudExtensionAttribute%s' %
+                                            attributeid][0].decode("utf-8")
+                except Exception:
+                    pass
+
             for attribute in range(1, 5):
                 try:
-                    grouplist.append(attrs['extensionAttribute%s' %
+                    grouplist.append(attrs['msDS-cloudExtensionAttribute%s' %
                                            attribute][0].decode("utf-8"))
                 except Exception:
                     pass
@@ -245,7 +255,7 @@ class AnsibleInventoryLDAP(object):
         parser.add_argument(
             '--groupname',
             help='Group Name to search in.',
-            default=fallback_args['groupname']),
+            default=fallback_args['groupname'])
         parser.add_argument(
             '--basedn',
             '-b',
