@@ -1,7 +1,7 @@
-- hosts: raspberry
+- hosts: all
   vars:
     no_proxy: '127.0.0.1,localhost,.local,169.254.169.254'
-  remote_user: pi
+  connection: local
   tasks:
     - name: execute | hosts
       set_fact:
