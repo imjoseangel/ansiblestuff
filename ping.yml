@@ -3,8 +3,13 @@
   hosts: all
   gather_facts: true
   connection: local
+  no_log: false
   
   tasks:
   
+  - name: Pinging localhost
+    debug:
+      msg: "Pinging localhost"
+      
   - name: Ping
     ping:
