@@ -7,20 +7,5 @@
   
   tasks:
   
-  - name: Pinging localhost
-    debug:
-      msg: "Pinging localhost"
-      
   - name: Ping
     ping:
-
-  - name: Test syslog
-    syslogger:
-      msg: "Hello from ansible"
-      priority: "err"
-      facility: "daemon"
-      log_pid: true
-    
-  - name: Simple Usage
-    syslogger:
-      msg: "I will end up as daemon.info"
